@@ -9,7 +9,7 @@ server=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind((h,p))
                      
 class ArtificialBrain:
-    def __init__(self,data_file='Main.json'):
+    def __init__(self,data_file='NeuralNetwork\\NeuralNetwork.json'):
         self.Source=data_file
         self.load_data()
     def load_data(self):
