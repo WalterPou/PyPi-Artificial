@@ -12,9 +12,12 @@ rate = engine.getProperty('rate')
 engine.setProperty('rate', 200)
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[0].id)
-IDX = int(input('COM: '))
-board = pyf.Arduino(f'COM{IDX}')
-pin_9 = board.get_pin('d:9:o')
+try:
+    IDX = int(input('COM: '))
+    board = pyf.Arduino(f'COM{IDX}')
+    pin_9 = board.get_pin('d:9:o')
+except:
+    pass
 
 def WakeCall():
     while True:
@@ -54,7 +57,7 @@ def Voice_Input():
         text = sr.Recognizer().recognize_google(audio)
         return text
     except:
-        return "I'm sorry, I could'nt answer that."
+        return "..."
     
 class JarvisArtificial:
     def __init__(self, data_file='Network.json'):
@@ -99,6 +102,12 @@ if __name__ == '__main__':
             engine.say(response)
             engine.runAndWait()
             if response == 'Okay! Turning on light..':
-                pin_9.write(1)
+                try:
+                    pin_9.write(1)
+                except:
+                    pass
             elif response == 'Okay! Turning off light..':
-                pin_9.write(0)
+                try:
+                    pin_9.write(0)
+                except:
+                    pass
