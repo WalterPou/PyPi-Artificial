@@ -80,19 +80,20 @@ class ArtificialIntelligence:
         )
         for chunk in stream:
             data += str(chunk['message']['content'])
+
         return data
     
 if __name__ == '__main__':
     AI = ArtificialIntelligence()
     while True:
         user_input = voiceInput(3)
-        if user_input == 'hey Dave':
+        if user_input == 'Josh':
             engine.say('Im listening.')
             engine.runAndWait()
             user_input = voiceInput(10)
             if user_input:
                 response = AI.get_response(user_input)
-                print(response)
+                print(f'AI >> {response}')
                 engine.say(response)
                 engine.runAndWait()
             else:
