@@ -1,5 +1,4 @@
 import json
-from fuzzywuzzy import process
 import sounddevice as sd
 import speech_recognition as sr
 import numpy as np
@@ -28,6 +27,40 @@ try:
     pin_9 = board.get_pin('d:9:o')
 except:
     pass
+
+class BMA:
+    def levenshtein_distance(self,s1,s2):
+        if len(s1)<len(s2):
+            return self.levenshtein_distance(s2,s1)
+        if len(s2)==0:
+            return len(s1)
+        prev=range(len(s2)+1)
+        
+        for i,c1 in enumerate(s1):
+            current=[i+1]
+            for j,c2 in enumerate(s2):
+                insert=prev[j+1]+1
+                delete=current[j]+1
+                subs=prev[j]+(c1!=c2)
+                current.append(min(insert,delete,subs))
+            prev=current
+        return prev[-1]
+
+    def ratio(self,s1,s2):
+        distance=self.levenshtein_distance(s1,s2)
+        maxLen=max(len(s1),len(s2))
+        return 1-distance/maxLen
+
+    def response_data(self,userInput,choices):
+        bestMatch=None
+        bestScore=-1
+        for choice in choices:
+            score=self.ratio(userInput,choice)
+            if score>bestScore:
+                bestMatch=choice
+                bestScore=score
+        return bestMatch,bestScore
+
 
 def WakeCall():
     while True:
@@ -89,8 +122,9 @@ class JarvisArtificial:
         questions = list(self.knowledge.keys())
         if not question:
             return None
-        matches, threshold = process.extractOne(question, questions)
-        if threshold > 80:
+        matches, threshold = BMA().response_data(question, questions)
+        if threshold > .2:
+            print(f'Question Threshold: {threshold:.2f}')
             return self.knowledge[matches]
         
     def get_response(self, question):
@@ -149,7 +183,7 @@ if __name__ == '__main__':
                 engine.say('Right away sir! Creating a base64 file..')
                 engine.runAndWait()
                 os.system('type nul > C:\\Users\\User\\Desktop\\File.txt')
-            elif VoiceData == 'integrate Google search':
+            elif VoiceData == 'start searching':
                 engine.say('What would you like me to search?')
                 engine.runAndWait()
                 data = Voice_Input(10)
@@ -163,7 +197,7 @@ if __name__ == '__main__':
                 Acc()
             else:
                 response = AI.get_response(VoiceData)
-                print(f'AI >> {response}')
+                print(f'> {response}')
                 engine.say(response)
                 engine.runAndWait()
                 if response == 'Okay! Turning on light..':
