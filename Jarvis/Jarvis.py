@@ -65,7 +65,7 @@ class BMA:
 def WakeCall():
     while True:
         sample_rate = 16000
-        duration = 5
+        duration = 3
         print('...')
         audio_data = sd.rec(int(sample_rate * duration), samplerate=sample_rate, dtype='float32', channels=1)
         sd.wait()
@@ -175,6 +175,7 @@ if __name__ == '__main__':
         WakeUp = WakeCall()
         if WakeUp == 'IDX0':
             VoiceData = Voice_Input(7)
+            print(VoiceData)
             if VoiceData == 'open device manager':
                 engine.say('Right away sir! Opening device manager..')
                 engine.runAndWait()
@@ -191,10 +192,17 @@ if __name__ == '__main__':
                 engine.runAndWait()
                 data = data.replace(' ', '+')
                 os.system(f'start https:\\google.com\\search?q={data}')
-            elif VoiceData == 'integrate rce remote code execution':
+            elif VoiceData == 'initiate Target accuracy procedure':
                 engine.say(f'Okay Sir! Visualizing screen..')
                 engine.runAndWait()
                 Acc()
+            elif VoiceData == 'start a website':
+                engine.say(f'What website would you like me to open?')
+                engine.runAndWait()
+                data = Voice_Input(5)
+                engine.say(f'Right away sir! opening "{data}"')
+                engine.runAndWait()
+                os.system(f'start https://{data}')
             else:
                 response = AI.get_response(VoiceData)
                 print(f'> {response}')
