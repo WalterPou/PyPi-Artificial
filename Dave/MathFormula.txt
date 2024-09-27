@@ -1,0 +1,23 @@
+lev_{a,b}(i,j)=\begin{cases}max(i,j)\\
+min\begin{cases}lev_{a,b}(i-1,j)+1\\lev_{a,b}(i,j+1)+1\\
+lev_{a,b}(i+1,j)+1_{(a_i\neq{b_j})}\end{cases}\end{cases}\\
+\text{if }min=0,otherwise\\
+\text{NN Formula:}\\
+\sum{wixi+bias}=w1x1+w2x2+w3x3+bias\\Output=f(x)+b=1\text{ if}\sum{w1x1+b}>=0;0\text{ if}\sum{w1x1+b}<0\\
+\text{Sigmoid:}\\
+f(x)=\sigma{(x)}=\frac{1}{1+e^{-1}}=\frac{e^x}{1+e^x}=1-\sigma{(x)}\\
+g11ReLU((X,S_x)|B)=\begin{cases}(X,S_x)&S_x=1\\(X+B,S_x)&S_x=0\end{cases}\\
+fw(y)=2^{y+1}\log_e(2)fw(2^y);fw(y)=\frac{2\log_e2}{\sqrt{2\pi\sigma^2}}{2^ye}-\frac{2^{2y}}{2\sigma^2}\\
+p_{ij}=\frac{e^{a_{ij}}}{\sum^N_{j=1}e^{a_ij}}=\frac{e^{a_{ij}}}{d_i}\\
+Z=\begin{cases}max(X,Y)+\triangle_+(|X-Y|)&S_x=S_y\end{cases}\\
+S_z=\begin{cases}S_x&X>Y\\S_y=&X\le{Y}\end{cases}\\
+log_2(e)\approx{1.442695...}\approx{2^0+2^{-2}+2^{-3}+2^{-4}+...}\\
+log_e(1\pm{x})\approx.{\pm{x}};0\le{x}\gg{1}\\
+\triangle_\pm(d)=\log_2(1\pm{2^{-d}})\approx{\pm{2^{-d}}*log_2(e)}\\
+w=x^y\gets\to{\frac{W}}=(yX,1)\\
+\frac{P}{}ij=(P_{ij},s_p_{ij})=(a_{ij}\log_{2}e,1)\square(-D_i,S_d_i)\\
+f(x)=ln(e^{5x})-2x-ln(1);h(x)=\log_3\binom{x\sqrt{x-6}{3}}{3}\\
+f(t)=t^{\frac{3}{2}}\log_6(\sqrt{t+2})\\
+y=(x^2+3)^x;y=\frac{(x^3+1)^4\sin^2x}{x^{\frac{1}{3}}}\\
+\frac{d}{dx}{(\log_ax)}=\frac{1}{x\text{ ln a}};\frac{d}{dx}{(\log_ex)}=\frac{d}{dx}{(\text{ln x})}=\frac{1}{x\text{ ln e}}=\frac{1}{x}\\
+\frac{d}{dx}{(\text{ln u})}=\frac{1}{u}\frac{du}{dx}=\frac{u\dot}{u}\text{ Chain Rule}
