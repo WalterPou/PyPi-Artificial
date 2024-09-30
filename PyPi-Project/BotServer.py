@@ -1,5 +1,4 @@
 import json
-from fuzzywuzzy import process
 import socket
 import threading
 
@@ -7,9 +6,44 @@ h = str(input('H: '))
 p = int(input('P: '))
 server=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind((h,p))
-                     
+
+class BMA:
+    def levenshtein_distance(self,s1,s2):
+        if len(s1)<len(s2):
+            return self.levenshtein_distance(s2,s1)
+        if len(s2)==0:
+            return len(s1)
+        previous=range(len(s2)+1)
+        for i,a in enumerate(s1):
+            current=[i+1]
+            for j,b in enumerate(s2):
+                current.append(
+                    min(
+                        previous[j+1]+1,
+                        current[j]+1,
+                        previous[j]+(a!=b)
+                    )
+                )
+            previous=current
+        return previous[-1]
+
+    def ratio(self,s1,s2):
+        distance=self.levenshtein_distance(s1,s2)
+        maxLen=max(len(s1),len(s2))
+        return 1-distance/maxLen
+
+    def extractOne(self,userInput,choices):
+        bestMatch=None
+        bestScore=-1
+        for choice in choices:
+            score=self.ratio(userInput,choice)
+            if score>bestScore:
+                bestMatch=choice
+                bestScore=score
+        return bestMatch,bestScore
+
 class ArtificialBrain:
-    def __init__(self,data_file='NeuralNetwork\\NeuralNetwork.json'):
+    def __init__(self,data_file='Network.json'):
         self.Source=data_file
         self.load_data()
     def load_data(self):
@@ -25,8 +59,8 @@ class ArtificialBrain:
         questions=list(self.knowledge.keys())
         if not question:
             return None
-        matches,threshold=process.extractOne(question,questions)
-        if threshold>80:
+        matches,threshold=BMA().extractOne(question,questions)
+        if threshold>.2:
             return self.knowledge[matches]
     def get_response(self,question):
         response=self.best_match(question)
