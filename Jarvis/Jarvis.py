@@ -21,13 +21,14 @@ rate = engine.getProperty('rate')
 engine.setProperty('rate', 200)
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[0].id)
+"""
 try:
     IDX = int(input('COM: '))
     board = pyf.Arduino(f'COM{IDX}')
     pin_9 = board.get_pin('d:9:o')
 except:
     pass
-
+"""
 class BMA:
     def levenshtein_distance(self,s1,s2):
         if len(s1)<len(s2):
@@ -203,6 +204,39 @@ if __name__ == '__main__':
                 engine.say(f'Right away sir! opening "{data}"')
                 engine.runAndWait()
                 os.system(f'start https://{data}')
+            elif VoiceData == 'pair Arduino device':
+                engine.say(f'Okay sir!, What IoT Serial COM you want me to connect to? Say the ID.')
+                engine.runAndWait()
+                data = Voice_Input(5)
+                try:
+                    if data == 'one':
+                        data = 1
+                    elif data == 'two':
+                        data = 2
+                    elif data == 'three':
+                        data = 3
+                    elif data == 'four':
+                        data = 4
+                    elif data == 'five':
+                        data = 5
+                    elif data == 'six':
+                        data = 6
+                    elif data == 'seven':
+                        data = 7
+                    elif data == 'eight':
+                        data = 8
+                    elif data == 'nine':
+                        data = 9
+                    elif data == 'ten':
+                        data = 10
+                    engine.say(f'Trying to connect the specific device..')
+                    board = pyf.Arduino(f'COM{int(data)}')
+                    engine.say(f'COM{data} serial device has successfully connected.')
+                    engine.runAndWait()
+                    pin_9 = board.get_pin('d:9:o')
+                except:
+                    engine.say(f'Couldnt connect to specified serial device.')
+                    engine.runAndWait()
             else:
                 response = AI.get_response(VoiceData)
                 print(f'> {response}')
