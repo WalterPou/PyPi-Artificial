@@ -105,7 +105,7 @@ def handle_client(conn,addr):
             print(f'Received({addr}): {msg}')
             print('Responding..')
             response=bot.get_response(msg)
-            if msg=='fix':
+            if msg=='!TEACH':
                 conn.sendall('Question?'.encode())
                 query=conn.recv(1024).decode()
                 conn.sendall('How do i answer that?'.encode())
