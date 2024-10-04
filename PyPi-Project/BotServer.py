@@ -44,7 +44,7 @@ class BMA:
         return bestMatch,bestScore
 
 class ArtificialBrain:
-    def __init__(self,data_file='Network.json'):
+    def __init__(self,data_file='neuralNetwork\\NeuralNetwork.json'):
         self.Source=data_file
         self.load_data()
         self.model='PCT2'
