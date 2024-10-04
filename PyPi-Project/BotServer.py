@@ -1,6 +1,7 @@
 import json
 import socket
 import threading
+import ollama
 
 h = str(input('H: '))
 p = int(input('P: '))
@@ -46,6 +47,10 @@ class ArtificialBrain:
     def __init__(self,data_file='Network.json'):
         self.Source=data_file
         self.load_data()
+        self.model='PCT2'
+        self.role='user'
+        self.maxLength=4000
+
     def load_data(self):
         try:
             with open(self.Source,'r') as Source:
@@ -65,12 +70,27 @@ class ArtificialBrain:
     def get_response(self,question):
         response=self.best_match(question)
         if response:
-            return response
+            #return response
+            return self.getUnknown(question)
         else:
-            return 'fix'
+            return self.getUnknown(question)
+        
     def learn(self,question,alias):
         self.knowledge[question]=alias
         self.save_data()
+
+    def getUnknown(self,question):
+        data = ''
+        stream = ollama.chat(
+            model=self.model,
+            messages=[{'role': self.role, 'content': str(question)}],
+            options={'num_predict': self.maxLength},
+            stream=True
+        )
+
+        for chunk in stream:
+            data += str(chunk['message']['content'])
+        return data
 
 def handle_client(conn,addr):
     print(f'[Connected] {addr} connected.')
@@ -85,16 +105,28 @@ def handle_client(conn,addr):
             print(f'Received({addr}): {msg}')
             print('Responding..')
             response=bot.get_response(msg)
-            if response=='fix':
+            if msg=='fix':
+                conn.sendall('Question?'.encode())
+                query=conn.recv(1024).decode()
                 conn.sendall('How do i answer that?'.encode())
                 data=conn.recv(1024).decode()
-                bot.learn(question=msg,alias=data)
+                bot.learn(question=query,alias=data)
                 conn.sendall('Thanks for teaching me!'.encode())
             else:
                 conn.sendall(response.encode())
     conn.close()
 
+def shutdown():
+    while True:
+        userInput=input()
+        if userInput=='!SHUTDOWN':
+            server.close()
+        else:
+            pass
+
 def start():
+    thread=threading.Thread(target=shutdown)
+    thread.start()
     server.listen()
     print(f'Server is listening..')
     while True:
@@ -102,4 +134,5 @@ def start():
         thread=threading.Thread(target=handle_client,args=(conn,addr))
         thread.start()
 
-start()
+if __name__ == '__main__':    
+    start()
